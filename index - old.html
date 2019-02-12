@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Budgeting Tool</title>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<h1>Your Friendly Budgeting Tool</h1>
+	<div class="input">
+		<h3>Please enter your amounts</h3>
+		<form action="">
+			<!-- Actual or Budget option -->
+			<!-- <label for="type">Budget or Spending: </label> -->
+			<!-- <select name="type" id="type"> -->
+				<!-- <select> creates drop down menu - items in menu are <options> below -->
+				<!-- <option value="" selected hidden>-- Please select an option --</option> -->
+				<!-- [selected] shows this option first -->
+				<!-- [hidden] hides this option from the user -->
+				<!-- <option value="Budget">Budget</option> -->
+				<!-- <option value="Actual">Spending</option> -->
+			<!-- </select> -->
+			<!-- Timeframe - monthly or weekly -->
+				<!-- <label for="timeframe">Timeframe:</label>
+				<select name="timeframe" id="timeframe">
+					<option value="" selected hidden>-- Please select an option --</option>
+					<option value="month">Monthly</option>
+					<option value="week">Weekly</option>
+				</select> -->
+			<!-- Categories -->
+			<label for="category">Category:</label>
+			<select name="category" id="category">
+				<!-- add required -->
+				<option value="" selected hidden>-- Please select a category --</option>
+				<option value="food">Food</option>
+				<option value="entertainment">Entertainment</option>
+				<option value="travel">Travel</option>
+				<option value="debt">Debt</option>
+				<option value="discretionary">Discretionary</option>
+				<option value="miscellaneous">Miscellaneous</option>
+			</select>
+			<label for="expense">Expense:</label>
+			<input type="text" id="expense" placeholder="Please name your expense>
+			<!-- add required -->
+			<label for="amount">Amount:</label>
+			<input type="number" id="amount" placeholder="Enter amount" step=0.01 min=0.01>
+			<!-- [step] - allows 2 decimal place input and [min] is the smallest number user can input-->
+			<!-- add required -->
+			<input type="submit" value="Submit">
+		</form>
+	</div>
+	<div class="output">
+		<h3>Here's your budget</h3>
+		<div class="wrapper">
+			<div class="flex">
+				<div class="category">
+					<h4>Categories</h4>
+					<ul>
+						<li class="food">Food
+							<!-- names for Food - sourced from script.js -->
+							<ul>
+							</ul>
+						</li>
+						<li class="entertainment">Entertainment
+							<!-- names for Entertainment -sourced from script.js -->
+							<ul>
+							</ul>
+							</li>
+						<li class="travel">Travel
+							<ul>
+							</ul>
+							<!-- names for Travel - sourced from script.js  -->
+						</li>
+						<li class="debt">Debt
+							<!-- names for Debt - sourced from script.js -->
+							<ul>
+							</ul>
+						</li>
+						<li class="discretionary">Discretionary
+							<!-- names for Discretionary - sourced from script.js -->
+							<ul>
+							</ul>
+						</li>
+						<li class="miscellaneous">Miscellaneous
+							<!-- names for Misc - sourced from script.js -->
+							<ul>
+							</ul>
+						</li>
+					</ul>
+				</div>
+				<!-- Budget Column -->
+				<div class="budget">
+					<h4>Budget</h4>
+					<ul>
+						<li class="foodBudget">0
+							<ul>
+							</ul>
+						</li>
+						<li class="entertainmentBudget">0
+							<ul>
+							</ul>
+						</li>
+						<li class="travelBudget">0
+							<ul>
+							</ul>
+						</li>
+						<li class="debtBudget">0
+							<ul>
+							</ul>
+						</li>
+						<li class="discretionaryBudget">0
+							<ul>
+							</ul>
+						</li>
+						<li class="miscellaneousBudget">0
+							<ul>
+							</ul>
+						</li>
+					</ul>
+				</div>
+				<!-- Actuals Column -->
+				<!-- <div class="actual">
+					<h4>Spending</h4>
+					<ul class="foodActual">
+						<li>0
+							<ul>
+								<li></li>
+							</ul>
+						</li>
+						<li class="entertainmentActual">0
+							<ul>
+								<li></li>
+							</ul>
+						</li>
+						<li class="travelActual">0
+							<ul>
+								<li></li>
+							</ul>
+						</li>
+						<li class="debtActual">0
+							<ul>
+								<li></li>
+							</ul>
+						</li>
+						<li class="discretionaryActual">0
+							<ul>
+								<li></li>
+							</ul>
+						</li>
+						<li class="miscellaneousActual">0
+							<ul>
+								<li></li>
+							</ul>
+						</li>
+					</ul>
+				</div> -->
+				<!-- Comparison Column -->
+		<!-- 		<div class="difference">
+				<h4>Difference</h4>
+					<ul>
+						<li class="foodDifference">0
+							<ul>
+								<li></li>
+							</ul>
+						</li>
+						<li class="entertainmentDifference">0
+							<ul>
+								<li></li>
+							</ul>
+						</li>
+						<li class="travelDifference">0
+							<ul>
+								<li></li>
+							</ul>
+						</li>
+						<li class="debtDifference">0
+							<ul>
+								<li></li>
+							</ul>
+						</li>
+						<li class="discretionaryDifference">0
+							<ul>
+								<li></li>
+							</ul>
+						</li>
+						<li class="miscellaneousDifference">0
+							<ul>
+								<li></li>
+							</ul>
+						</li>
+					</ul>
+				</div>	 -->
+
+			</div> 
+		</div>
+	</div>
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="script.js"></script>
+	<!-- <script src="testscript.js"></script> -->
+</body>
+</html>
