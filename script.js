@@ -1,10 +1,12 @@
 let food = [
-    groceries: {budget: 200},
-    dineOut: {budget: 100}
-]
-// category is an array with sub categories as objects (budget, amount is grouped together)
-// this is easier to conceptualize
+    { groceries: {budget: 200, actual: 180} },
+    { restaurants: {budget: 100, actual: 90} }
+];
+// TODO: finishing basic styling - try moving data from food array (test if dom manipulation is feasible before proceeding further)
 
+
+// let food = [{sub}, "dine-out"];
+// category is an array with sub categories as objects (budget, amount is grouped together)
 
 
 // Features
@@ -23,12 +25,15 @@ let food = [
 // Array and object will be holding the data - all inputs will update the array/object 
 
 // Neutral state - do not show any categories if there are no sub categories
-
+$( function(){
+    console.log("Document Ready!!");
+});
 
 // 1) Add sub categories to categories
 // user has choice to add/delete/edit
 // if user chooses to add find the appropriate array and create an object 
 // user selects category and names sub category - these inputs create the new object (subcategory and amount properties)
+// if there is no subcategory being added, simply create a total object
 // only update when user clicks submit
 
 // 2) add sub categories
@@ -45,7 +50,8 @@ let food = [
 
 // 4) editing sub categories 
 // if the user chooses to edit - check if there is an existing sub category
-//if there is an existing category take the existing amount add the edited amount revise the property
+// editing will replace the number completely
+//if there is an existing category revise the sub category to the edited amount
 
 // 5) showing comments
 // if add function is run print add
