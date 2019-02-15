@@ -1,0 +1,17 @@
+table {
+    width: 100%;
+    border-spacing: 25px;
+}
+
+th {
+    text-align: left;
+}
+
+tr.sub-category td:first-child {
+    padding-left: 2%;
+}
+
+.edit,
+.delete {
+    margin-left: 10%;
+}

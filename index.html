@@ -9,75 +9,66 @@
 </head>
 <body>
     <div class="wrapper">
-        <div class="input">
-            <h2>Please enter your expense</h2>
-            <form action="">
-                <div class="expense">
-                    <label for="category" class="visuallyhidden">Expense:</label>
-                    <select name="category" id="category" required>
-                        <option value="" selected hidden>Please select a category</option>
-                        <option value="food">Food</option>
-                        <option value="entertainment">Entertainment</option>
-                        <option value="travel">Travel</option>
-                        <option value="debt">Debt</option>
-                        <option value="discretionary">Discretionary</option>
-                        <option value="miscellaneous">Miscellaneous</option>
-                    <label for="expense">Expense:</label>
-                    <input type="text" id="subcategory" placeholder="Please name your expense"> 
-                </div>
-
-                <div class="action">
-                    <input type="radio" name="action" id="add" required>
-                    <label for="add">Add</label>
-        
-                    <input type="radio" name="action" id="edit">
-                    <label for="edit">Edit</label>
-        
-                    <input type="radio" name="action" id="delete">
-                    <label for="delete">Delete</label>
-                </div>
-
-                <div class="amount">
-                    <label for="budget">Amount:</label>
-                    <input type="number" id="budget" placeholder="Budget" step=0.01 min=0.01>
-                    <input type="number" id="spent" placeholder="Spent" step=0.01 min=0.01>
-                </div>
-                
-                <input type="submit" value="Submit">
-            </form>
+        <h1>Budget Me</h1>
+        <div class="flex-row">
+            <div class="input wrapper_inner">
+                <h2>Please enter your monthly budget</h2>
+                <form action="">
+                    <div class="expense">
+                        <label for="category" class="visually-hidden">Expense:</label>
+                        <select name="category" id="category" required>
+                            <option value="" selected hidden>Please select a category</option>
+                            <option value="food">Food</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="travel">Travel</option>
+                            <option value="debt">Debt</option>
+                            <option value="discretionary">Discretionary</option>
+                            <option value="miscellaneous">Miscellaneous</option>
+                        <label for="expense">Expense:</label>
+                        <input type="text" id="subcategory" placeholder="Please name your expense"> 
+                    </div>
+    
+                    <div class="amount">
+                        <label for="budget" class="visually-hidden">Amount:</label>
+                        <input type="number" id="budget" placeholder="Amount" step=0.01 min=0.01>
+                    </div>
+                    
+                    <input type="submit" value="Submit" class="submit">
+                </form>
+            </div>
+            
+            <div class="output wrapper_inner">
+                <h2>Your Monthly Summary</h2>
+                <table>
+                    <tr class="heading">
+                        <th>Category</th>
+                        <th>Budget</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                    <!-- below is just an example, nothing will show until user inputs data -->
+                    <tr class="food">
+                        <td class="category">Food</td>
+                        <td class="budget">$200.00</td>
+                    </tr>
+                    <!-- use class name food as selector to append subcategories -->
+                    <!-- use class names budget/spent/difference as selectors to update their respective amounts -->
+                    <tr class="groceries sub-category">
+                        <td class="category">Groceries</td>
+                        <td class="budget">$200.00</td>
+                        <td><input type="radio" name="action" value="edit" class="edit"></td>
+                        <td><input type="radio" name="action" value="delete" class="delete"></td>
+                    </tr>
+                    <!-- if user deletes sub category - remove the entire groceries class -->
+                    <!-- if user selects edit - go inside the groceries class and update based on user changes -->
+                    <!-- indent all (.sub-category .category) to the right -->
+                    <!-- just need to make the  -->
+                </table>
+            </div>
         </div>
-        <div class="output">
-            <h2>Your Monthly Budget</h2>
-            <table>
-                <tr class="heading">
-                    <th>Category</th>
-                    <th>Budget</th>
-                    <th>Actual</th>
-                    <th>Budget vs Actual</th>
-                </tr>
-                <!-- below is just an example, nothing will show until user inputs data -->
-                <tr class="food">
-                    <td class="category">Food</td>
-                    <td class="budget">$200.00</td>
-                    <td class="spent">$120.00</td>
-                    <td class="difference">$80.00</td>
-                </tr>
-                <!-- use class name food as selector to append subcategories -->
-                <!-- use class names budget/spent/difference as selectors to update their respective amounts -->
-                <tr class="groceries sub-category">
-                    <td class="category">Groceries</td>
-                    <td class="budget">$200.00</td>
-                    <td class="spent">$120.00</td>
-                    <td class="difference">$80.00</td>
-                </tr>
-                <!-- if user deletes sub category - remove the entire groceries class -->
-                <!-- if user selects edit - go inside the groceries class and update based on user changes -->
-                <!-- indent all (.sub-category .category) to the right -->
-                <!-- just need to make the  -->
-            </table>
-        </div>
-        <div class="summary"></div>
-        <!-- stretch goal -->
+        <!-- <div class="transactions spending">
+
+        </div> -->
     </div>
     <script src='https://code.jquery.com/jquery-3.2.1.min.js' integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4='crossorigin='anonymous'></script>
     <script src="script.js"></script>

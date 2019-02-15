@@ -1,0 +1,38 @@
+input {
+    padding-left: 1.5%;
+}
+
+input,
+select {
+    margin-bottom: $general-spacing ;
+}
+
+select {
+    padding-left: 0.5%;
+}
+
+.expense select {
+    margin-right: $general-spacing;
+    width: 45%;
+}
+
+.expense input {
+    width: calc(55% - 2.5%);
+}
+
+.amount input::-webkit-inner-spin-button, 
+.amount input::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+// hides the arrows in the amount input - for chrome & IE
+
+.amount input {
+    -moz-appearance:textfield;
+}
+//hides the arrows in the amuont input - firefox
+
+.submit {
+    width: 30%;
+    margin-bottom: 0;
+}

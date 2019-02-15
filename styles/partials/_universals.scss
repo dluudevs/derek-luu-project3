@@ -1,0 +1,50 @@
+* {
+    margin: 0;
+}
+
+.wrapper {
+width: 90%;
+max-width: 1600px;
+margin: 0 auto;
+}
+
+.wrapper_inner {
+    width: 90%;
+    padding: $general-spacing;
+}
+
+.table-spacing {
+    display: flex;
+    justify-content: space-between;
+}
+
+h1, h2 {
+    margin-bottom: $general-spacing;
+}
+
+h1 {
+    margin-top: $general-spacing;
+}
+
+
+
+.flex-row,
+.input,
+.output {
+    display: flex;
+}
+
+.input,
+.output {
+    border: 1px solid dodgerblue;
+    flex-direction: column;
+}
+
+.input {
+    width: 45%;
+    margin-right: 5%;
+}
+
+.output {
+    width: 50%;
+}
