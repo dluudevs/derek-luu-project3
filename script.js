@@ -9,35 +9,21 @@ const budget = [
             { name: "restaurants", amount: 100  }
         ] 
     },
-    // {
-    //     name: "entertainment",
-    //     subcategory: [
-    //         { name: "movies",  amount: 200  },
-    //         { name: "drinks",  amount: 100  }
-    //     ]
-    // }
+    {
+        name: "entertainment",
+        subcategory: [
+            { name: "movies",  amount: 200  },
+            { name: "drinks",  amount: 100  }
+        ]
+    }
 ];
 
-
-// use forEach 
-
-// Features
-//     - Add sub categories to categories
-//     - Categories update dynamically based on total sub categories
-//         o	Cannot create a sub category that already exists
-//         o	Do not create another sub category if you want to update an existing one
-//         o	Give user option to delete a subcategory and update the total
-//      - message window for users giving feedback when expense added/edited/deleted??
-//     - Show total budgeted amount
-// Extras
-//     - Actuals column / comparison column
-//         o	With the result include a message
-//     - Show either column in a pie chart 
-
+// *************************************************************************************************
 
 // could empty() be used in one of these instances
 // could replace() be used to clear content
 // selector will create the element if it does not already exist
+// use reduce to sum up all amounts of sub category 
 
 // *************************************************************************************************
 
@@ -58,37 +44,81 @@ myApp.listenSubmit = () => {
         e.preventDefault();
         myApp.getUserInput();
         console.log('User clicked submit, category selected is:', myApp.userCategory);
-        myApp.createSubCategory(budget);
+        myApp.createSubCategory(budget, myApp.userCategory);
     });
 }
 
-// *** creates subcategory object in budget array
-myApp.createSubCategory = (array) => {
-    //check array for the selected expense category before creating an object 
-    const filterCategory = array.filter((index) => {
-        return index.name === myApp.userCategory;
-    });
+// *** creates subcategory object in budget/amount array
+myApp.createSubCategory = (array, category) => {
+    // the category parameter is a placeholder for the filterExpense() method which accepts two arguments (so you can use it to filter categories and sub-categories)
+
+    const filterCategory = myApp.filterExpense(array, category); //this works
     //create an array where the category equals to the category inputted by the user
 
     if (filterCategory === undefined || filterCategory.length === 0){ 
-        // if the new array does not contain the category the user inputted
-        console.log("Your array is empty");
+        // if the new array does not contain the category the user inputted (category not found)
+        console.log(myApp.userCategory, " does not exist");
         budget.push( { name: myApp.userCategory, subcategory: [{name:myApp.userSubcategory, amount: myApp.budgetAmount}] } );
-        //create category and subcategory in the array
-        console.log("New item added to your array", budget);
-    } else {
-        console.log("Found your category!!");
-        // create sub-category object at the index where the the value of name is equal to the user's input
+        //creates category and subcategory in the array
+        console.log("New item added to your array", array);
+    } else if (filterCategory.length > 0) {
+        // if your item exists in the filtered array
+        console.log("Found your category!!", myApp.userCategory);
+        // find the index of the category (check of category exists)
+        myApp.findCategory(array);
+        // within the index of the category check if the sub-category exists. if it does not exist add the sub-category. if it does alert the user
+        myApp.findSubcategory(array);
+        console.log("this is your the updated array", array);
     }
+}
+
+// *** checks if the sub-category exists. alert the user if sub-category already exists, add the sub-category if it does not
+myApp.findSubcategory = (array) => {
+    // array is the budget or spent array
+    const filterSubcategory = myApp.filterExpense(array[myApp.indexCategory].subcategory, myApp.userSubcategory); 
+    //myApp.indexCategory is created by the findCategory function, this function must be called after it
+
+    //  if the array has nothing in it, no subcategories are found. create a new object (subcategory) and an array within it
+    if (filterSubcategory === undefined || filterSubcategory.length === 0){
+        array[myApp.indexCategory].subcategory.push({ name: myApp.userSubcategory, amount: myApp.budgetAmount });
+        console.log("This sub-category does not exist! I've added it for you", array);
+    } else if (filterSubcategory.length > 0) {
+        // if that array has more than one item (sub-category exists) - do NOT create a new sub category
+        alert("This sub-category already exists! Please add a new sub-category or edit an existing one");
+    }
+}
+
+// *** finds the category inputted by the user in array - returns the index number where the category already exists 
+myApp.findCategory = (array) => {
+    // matchesCategory is the condition that must be met for the findIndex array method
+    myApp.matchesCategory = (category) => {
+        // placeholder value represents indices in the array (because it will be passed to findIndex() method)
+        return category.name === myApp.userCategory;
+        //condition where [index].name === myApp.userCategory
+    }
+    //conditional function is passed to the findIndex method which will look through all indices that meet the condition
+    myApp.indexCategory = array.findIndex(myApp.matchesCategory);
+    // stores the index of the category found in the array, add that object to the index 
+    console.log("The selected category is located in this index: ", myApp.indexCategory);
+}
+
+// *** checks array for the selected expense category
+myApp.filterExpense = (array, category) => {
+
+    //need return to store the value that filter() returns
+    return array.filter((index) => {
+        return index.name === category;
+    });
 }
 
 // *** store values of user's input
 myApp.getUserInput = () => {
-    myApp.userCategory = $('#category-budget').val();
+    myApp.userCategory = $('#category-budget').val().toLowerCase();
     // take user's category selection and store it 
-    myApp.userSubcategory = $('#subcategory-budget').val();
-    myApp.budget = myApp.convertNum($('#budget').val());
+    myApp.userSubcategory = $('#subcategory-budget').val().toLowerCase();
+    myApp.budgetAmount = myApp.convertNum($('#budget').val());
     // converts user's amount to dollars (inputs always hold string values)
+    console.log(`User category: ${myApp.userCategory}, User sub-category: ${myApp.userSubcategory}, User budget: ${myApp.budgetAmount}`);
 }
 
 // *** converts user input to dollars
@@ -99,15 +129,10 @@ myApp.convertNum = (string) => {
 
 
 
-    // user selects category and names sub category - these inputs create the new object (subcategory and amount properties)
-    // if there is no subcategory being added, simply create a total object
-    // only update when user clicks submit
+// get the total of each category
+// give each category its own line
+// all sub categories should come after category
 
-// 2) add sub categories
-    // only update the category when a sub category is added/edited/deleted
-    // when user wants to create a sub category, iterate through the array and look for the object to ensure it does not already exist
-            // if the sub category already exists, let the user know - dont update the eamounts
-            // sum up the totals of the objects (category) and print
 
 // 3) deleting sub categories
     // if user chooses to delete - check if there is an existing sub category and change the object's subcategory to null (assuming we cannot delete objects from the array)
@@ -119,23 +144,12 @@ myApp.convertNum = (string) => {
     // if the user chooses to edit - check if there is an existing sub category
     // editing will replace the number completely
     //if there is an existing category revise the sub category to the edited amount
+    //Edit button
+        // once checked, anything entered in the amount side will find the input category and change the amount to the amount the user inputs
+        // when the user is editing, make it abundantly clear in the input section's h2
+        // once the user clicks submit uncheck the edit button (do the same thing with the delete button)
 
-// 5) showing comments
-        // if add function is run print add
-        // if delete function is run print delete
-
-// 6) showing the data
-    //when the user clicks submit after adding/editing/deleting sub category
-    // display all the sub categories for that category and their amounts
-    // display the category total  
-
-
-//7) Edit button
-    // once checked, anything entered in the amount side will find the input category and change the amount to the amount the user inputs
-    // when the user is editing, make it abundantly clear in the input section's h2
-    // once the user clicks submit uncheck the edit button (do the same thing with the delete button)
-
-//8) Delete Button
+// 5) Delete Button
     //once checked, ask the user to confirm
     //when the user confirms, remove the sub category from the data structure
 
