@@ -1,20 +1,21 @@
 const budgetApp = {};
+//organizes and allows global access to variables
 
 const budget = [
-    {
-        name: "Food",
-        subcategory: [
-            { name: "groceries", budget: 200, actual: 180  },
-            { name: "restaurants", budget: 100, actual: 90  }
-        ] 
-    },
-    {
-        name: "Entertainment",
-        subcategory: [
-            { name: "movies",  budget: 200, actual: 180  },
-            { name: "drinks",  budget: 100, actual: 90  }
-        ]
-    }
+    // {
+    //     name: "food",
+    //     subcategory: [
+    //         { name: "groceries", amount: 200  },
+    //         { name: "restaurants", amount: 100  }
+    //     ] 
+    // },
+    // {
+    //     name: "entertainment",
+    //     subcategory: [
+    //         { name: "movies",  amount: 200  },
+    //         { name: "drinks",  amount: 100  }
+    //     ]
+    // }
 ];
 
 
@@ -48,17 +49,56 @@ const budget = [
 
 // Neutral state - do not show any categories if there are no sub categories
 
-// 1) Add sub categories to categories
-    // if user chooses to add find the appropriate array and create an object 
-        // when the user clicks submit take user input and create an object in the array
+budgetApp.init = () => {
+    budgetApp.listenSubmit();
+}
 
-        let userInput = 
-        // find the object, if object does not exist, create the object
-        const findCategory = () => {
-           const category = budget.forEach(index){
-                return 
-            }
-        }
+budgetApp.convertNum = (string) => {
+    return parseFloat(string);
+    // parseFloat returns a number with a decimal place
+};
+
+// 1) Add sub categories to categories
+// if user chooses to add find the appropriate array and create an object 
+// when the user clicks submit take user input and create an object in the array
+
+budgetApp.listenSubmit = () => {
+    // perform the below functions only after the form has been submitted
+    $('.input form').on('submit', function(e){
+        e.preventDefault();
+        budgetApp.userCategory = $('#category').val();
+        // take user's category selection and store it 
+        budgetApp.userSubcategory = $('#subcategory').val();
+        budgetApp.budget = $('#budget').val();
+        budgetApp.budgetAmount = budgetApp.convertNum(budgetApp.budget);
+        console.log(typeof budgetApp.budgetAmount);
+        // it returns as a number!!!!!
+
+        console.log('User clicked submit, category selected is:', budgetApp.userCategory);
+        budgetApp.findCategory();
+    });
+}
+
+//check for the selected expense category before creating an object 
+budgetApp.findCategory = () => {
+    const category = budget.filter((index) => {
+        return index.name === budgetApp.userCategory;
+    });
+
+    if (category === undefined || category.length === 0){ 
+        //create category and subcategory in the array
+        console.log("Your array is empty");
+        budget.push( { name: budgetApp.userCategory, subcategory: [ { name:budgetApp.userSubcategory, amount: budgetApp.budgetAmount } ] } );
+        console.log("New item added to your array", budget);
+    } else {
+        console.log("Found your category!!");
+        // create sub-category within category (same index)
+    }
+       
+}
+// if object does not exist, create the object
+
+
 
     // user selects category and names sub category - these inputs create the new object (subcategory and amount properties)
     // if there is no subcategory being added, simply create a total object
@@ -109,6 +149,5 @@ const budget = [
     // always use 0 so that comparison can return a value
 
 $(function () {
-    console.log("Document Ready!!");
-
+    budgetApp.init();
 });
