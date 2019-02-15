@@ -1,14 +1,14 @@
-const budgetApp = {};
-//organizes and allows global access to variables
+const myApp = {};
+//organizes and allows global access to variables/methods as modular components - also prevents confict with other code
 
 const budget = [
-    // {
-    //     name: "food",
-    //     subcategory: [
-    //         { name: "groceries", amount: 200  },
-    //         { name: "restaurants", amount: 100  }
-    //     ] 
-    // },
+    {
+        name: "food",
+        subcategory: [
+            { name: "groceries", amount: 200  },
+            { name: "restaurants", amount: 100  }
+        ] 
+    },
     // {
     //     name: "entertainment",
     //     subcategory: [
@@ -20,12 +20,6 @@ const budget = [
 
 
 // use forEach 
-
-
-// object organizes global variables/functions as modular components - also prevent conflicts from other code 
-// create an object that holds functions??? would it better to hold all the data in one object as well????
-// TODO: finishing basic styling - try moving data from food array (test if dom manipulation is feasible before proceeding further)
-
 
 // Features
 //     - Add sub categories to categories
@@ -49,54 +43,59 @@ const budget = [
 
 // Neutral state - do not show any categories if there are no sub categories
 
-budgetApp.init = () => {
-    budgetApp.listenSubmit();
+myApp.init = () => {
+    myApp.listenSubmit();
 }
-
-budgetApp.convertNum = (string) => {
-    return parseFloat(string);
-    // parseFloat returns a number with a decimal place
-};
 
 // 1) Add sub categories to categories
 // if user chooses to add find the appropriate array and create an object 
 // when the user clicks submit take user input and create an object in the array
 
-budgetApp.listenSubmit = () => {
-    // perform the below functions only after the form has been submitted
+// *** event listener for submit event
+myApp.listenSubmit = () => {
+    // perform the below functions once user submits form
     $('.input form').on('submit', function(e){
         e.preventDefault();
-        budgetApp.userCategory = $('#category').val();
-        // take user's category selection and store it 
-        budgetApp.userSubcategory = $('#subcategory').val();
-        budgetApp.budget = $('#budget').val();
-        budgetApp.budgetAmount = budgetApp.convertNum(budgetApp.budget);
-        console.log(typeof budgetApp.budgetAmount);
-        // it returns as a number!!!!!
-
-        console.log('User clicked submit, category selected is:', budgetApp.userCategory);
-        budgetApp.findCategory();
+        myApp.getUserInput();
+        console.log('User clicked submit, category selected is:', myApp.userCategory);
+        myApp.createSubCategory(budget);
     });
 }
 
-//check for the selected expense category before creating an object 
-budgetApp.findCategory = () => {
-    const category = budget.filter((index) => {
-        return index.name === budgetApp.userCategory;
+// *** creates subcategory object in budget array
+myApp.createSubCategory = (array) => {
+    //check array for the selected expense category before creating an object 
+    const filterCategory = array.filter((index) => {
+        return index.name === myApp.userCategory;
     });
+    //create an array where the category equals to the category inputted by the user
 
-    if (category === undefined || category.length === 0){ 
-        //create category and subcategory in the array
+    if (filterCategory === undefined || filterCategory.length === 0){ 
+        // if the new array does not contain the category the user inputted
         console.log("Your array is empty");
-        budget.push( { name: budgetApp.userCategory, subcategory: [ { name:budgetApp.userSubcategory, amount: budgetApp.budgetAmount } ] } );
+        budget.push( { name: myApp.userCategory, subcategory: [{name:myApp.userSubcategory, amount: myApp.budgetAmount}] } );
+        //create category and subcategory in the array
         console.log("New item added to your array", budget);
     } else {
         console.log("Found your category!!");
-        // create sub-category within category (same index)
+        // create sub-category object at the index where the the value of name is equal to the user's input
     }
-       
 }
-// if object does not exist, create the object
+
+// *** store values of user's input
+myApp.getUserInput = () => {
+    myApp.userCategory = $('#category-budget').val();
+    // take user's category selection and store it 
+    myApp.userSubcategory = $('#subcategory-budget').val();
+    myApp.budget = myApp.convertNum($('#budget').val());
+    // converts user's amount to dollars (inputs always hold string values)
+}
+
+// *** converts user input to dollars
+myApp.convertNum = (string) => {
+    return parseFloat(string);
+    // parseFloat returns a number with a decimal place
+};
 
 
 
@@ -149,5 +148,5 @@ budgetApp.findCategory = () => {
     // always use 0 so that comparison can return a value
 
 $(function () {
-    budgetApp.init();
+    myApp.init();
 });
