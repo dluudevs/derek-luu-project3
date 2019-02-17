@@ -232,6 +232,9 @@ th {
 tr.sub-category td:first-child {
   padding-left: 2%; }
 
+.name {
+  text-transform: capitalize; }
+
 .edit,
 .delete {
   margin-left: 10%; }

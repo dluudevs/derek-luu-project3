@@ -4,6 +4,7 @@ const myApp = {};
 const budget = [
     // {
     //     name: "food",
+    //     amount: 300,
     //     subcategory: [
     //         { name: "groceries", amount: 200  },
     //         { name: "restaurants", amount: 100  }
@@ -27,20 +28,8 @@ myApp.init = () => {
     myApp.listenSubmit();
     
 }
-
-// get the total of each category
-    //eg., how do i get the total of food
     
-    // use IndexCategory to get to food
-    // go inside the category sum up all amounts reduce??
-    // take this total and create a new property after name (eg., {name: food, total: 300})
-    
-    // dom manipulation 
-    // give each category its own line
-    // all sub categories should come after category
-    
-    
-    // *** event listener for submit event
+// *** event listener for submit event
 myApp.listenSubmit = () => {
     // perform the below functions once user submits form
     $('.input form').on('submit', function(e){
@@ -51,8 +40,18 @@ myApp.listenSubmit = () => {
         // Adding sub category fucntion ends here **********
         $('.input form')[0].reset();
         //https://stackoverflow.com/questions/3786694/how-to-reset-clear-form-through-javascript
+        // reset is a DOM element method, DOM sits at index[0] of the jquery object
     });
 }
+
+
+// ****** PROBLEM: data structure is fine - printing is broken
+    // conditions: 2 existing categories. 1 category has more than 1 sub-category
+    // when: trying to add a 3rd category
+    // what: takes old sub-category name and adds it to the old category (old category will have the correct amount shown in the array)
+    // why: 
+
+// -------------------------- Add Expense --------------------------
 
 // *** creates subcategory object in budget/amount array under the selected category
 myApp.createSubCategory = (array, category) => {
@@ -79,10 +78,22 @@ myApp.createSubCategory = (array, category) => {
         //within category, check if the subcategory exists. If it doesn't; create a new subcategory, calculate the new total of category and add it to the array. If the subcategory exists, alert the user and dont change the data structure.
         myApp.findSubcategory(array);
     }
-}
+
+    // print the category and sub-category to the DOM - will also check for new/existing categories
+    myApp.printBudgetExpenses(array);
+};
+
+
+// *** checks array for the selected expense category
+myApp.filterExpense = (array, category) => {
+    //need return to store the value that filter() returns
+    return array.filter((index) => {
+        return index.name === category;
+    });
+};
 
 // *** calculates sum of sub-categories in a given category and creates a property of amount in the category
-    //call this function only when a sub-category has been added / edited / delete - this way the function only calculates the sum for the affected category (instead of calculating the total every time user click submit)
+//call this function only when a sub-category has been added / edited / delete - this way the function only calculates the sum for the affected category (instead of calculating the total every time user click submit)
 myApp.categoryTotal = (array, index) => {
     //calculate the sum of its sub categories
     myApp.sumSubCategory = array[index].subcategory.reduce((accumulator, currentValue) => {
@@ -93,7 +104,20 @@ myApp.categoryTotal = (array, index) => {
     array[index].amount = myApp.sumSubCategory;
     console.log(array[index]);
     // adds category's amount to the array
-}
+};
+
+// *** finds the category inputted by the user in array - returns the index number where the category already exists 
+myApp.findCategory = (array) => {
+    // matchesCategory is the condition that must be met for the findIndex array method
+    myApp.matchesCategory = (category) => {
+        // placeholder value represents indices in the array (because it will be passed to findIndex() method)
+        return category.name === myApp.userCategory;
+        //condition where [index].name === myApp.userCategory
+    }
+    //conditional function is passed to the findIndex JS method which will look through all indices that meet the condition
+    myApp.indexCategory = array.findIndex(myApp.matchesCategory);
+    // stores the index of the category found in the array, add a subcategory at that index
+};
 
 // *** checks if the sub-category exists. alert the user if sub-category already exists, add the sub-category if it does not
 myApp.findSubcategory = (array) => {
@@ -111,33 +135,75 @@ myApp.findSubcategory = (array) => {
         // second argument is the index posiion of the existing category 
     } else if (filterSubcategory.length > 0) {
         // if that array has more than one item (sub-category exists) - do NOT create a new sub category
-        alert("This sub-category already exists!");
+        alert('This sub-category already exists!');
     }
-}
+};
 
-// *** finds the category inputted by the user in array - returns the index number where the category already exists 
-myApp.findCategory = (array) => {
-    // matchesCategory is the condition that must be met for the findIndex array method
-    myApp.matchesCategory = (category) => {
-        // placeholder value represents indices in the array (because it will be passed to findIndex() method)
-        return category.name === myApp.userCategory;
-        //condition where [index].name === myApp.userCategory
+// *** for every item in the budget array - display: subcategory + amount and category + amount
+// print only when something has changed - index position will vary depending if the category already exists or if it was just added
+myApp.printBudgetExpenses = (array) => {
+
+    // console.log("myApp.indexCategory: ", myApp.indexCategory);
+
+    // if category does not exist
+    if (myApp.indexCategory === undefined || myApp.indexCategory < 0) {
+
+        //print the newly added category
+        $('.heading').after(`
+            <tr class="${myApp.userCategory} category">
+                <td class=name>${myApp.userCategory}</td>
+                <td class=budget>$ ${myApp.sumSubCategory}</td>
+            </tr>
+        `);
+        // class = "${variable} string" works because they are already inside template literals
+
+
+        // go to index with the corresponding category, find the subcategory array and go to last index (newly added sub-category)
+        myApp.indexSubcategory = array[array.length - 1].subcategory[array[array.length - 1].subcategory.length - 1];
+
+        myApp.newSubcategoryName = myApp.indexSubcategory.name;
+        console.log(myApp.newSubcategoryName);
+        myApp.newSubcategoryAmount = myApp.indexSubcategory.amount;
+        console.log(myApp.newSubcategoryAmount);
+
+        // print the newly added sub-category
+        myApp.printSubcategories(myApp.userCategory, myApp.newSubcategoryName, myApp.newSubcategoryAmount, "budget");
+
+
+        // if category already exists - don't print the category again. Find it's classs and change the amount
+    } else if (myApp.indexCategory > -1) {
+        // take the value and amount of the existing category and print it
+        $(`.${myApp.userCategory}.category .budget`).text(`$ ${myApp.sumSubCategory}`);
+
+        // go to index with the corresponding category, find the subcategory array and go to last index (for newly added sub-category)
+        myApp.indexSubcategory = array[myApp.indexCategory].subcategory[array[myApp.indexCategory].subcategory.length - 1];
+        // [-------- sub-categtory array -------] [ -------- subcategory array. length - 1 -------- ]
+        myApp.newSubcategoryName = myApp.indexSubcategory.name;
+        myApp.newSubcategoryAmount = myApp.indexSubcategory.amount;
+
+        // print the new sub-category 
+        myApp.printSubcategories(array[myApp.indexCategory].name, myApp.newSubcategoryName, myApp.newSubcategoryAmount, "budget");
     }
-    //conditional function is passed to the findIndex method which will look through all indices that meet the condition
-    myApp.indexCategory = array.findIndex(myApp.matchesCategory);
-    // stores the index of the category found in the array, add that object to the index 
-    // console.log("The selected category is located in this index: ", myApp.indexCategory);
+};
+
+
+// *** prints subcategories > use parameters because index position of category will change depending of its new or old
+myApp.printSubcategories = (categoryName, SubcategoryName, SubcategoryAmount, arrayName) => {
+    //arrayName is a string for the name of the array, array is the actual array that holds the data 
+    $(`.${categoryName}`).after(`
+        <tr class="${SubcategoryName} sub-category">
+            <td class=name>${SubcategoryName}</td>
+            <td class=${arrayName}>$ ${SubcategoryAmount}</td>
+            <td><input type=radio name=action value=edit class=edit></td>
+            <td><input type=radio name=action value=delete class=delete></td>
+        </tr>
+    `)
 }
 
-// *** checks array for the selected expense category
-myApp.filterExpense = (array, category) => {
+// -------------------------- End of Add Expense --------------------------
 
-    //need return to store the value that filter() returns
-    return array.filter((index) => {
-        return index.name === category;
-    });
-}
 
+// -------------------------- User Input --------------------------
 // *** store values of user's input
 myApp.getUserInput = () => {
     myApp.userCategory = $('#category-budget').val().toLowerCase();
@@ -153,8 +219,8 @@ myApp.getUserInput = () => {
 myApp.convertNum = (string) => {
     return parseFloat(string);
     // parseFloat returns a number with a decimal place
-};
-
+}
+// -------------------------- End of User Input --------------------------
 
 
 
