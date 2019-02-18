@@ -11,14 +11,14 @@ const budget = [
     //     ] 
     // },
     // {
-    // demo of the array structure    
+    // demo of the data structure    
 ];
 
 // *************************************************************************************************
 
 // could empty() be used in one of these instances
 // could replace() be used to clear content
-// template liteals do not play well with objects, cannot convert them to a string
+// template literals do not play well with objects, cannot convert them to a string
 
 // *************************************************************************************************
 
@@ -37,20 +37,61 @@ myApp.listenSubmit = () => {
         myApp.getUserInput();
         // ********** Adding sub category function starts here 
         myApp.createSubCategory(budget, myApp.userCategory);
-        // Adding sub category fucntion ends here **********
-        $('.input form')[0].reset();
-        //https://stackoverflow.com/questions/3786694/how-to-reset-clear-form-through-javascript
-        // reset is a DOM element method, DOM sits at index[0] of the jquery object
+        // Adding sub category function ends here **********
     });
 }
 
 
-// ****** PROBLEM: data structure is fine - printing is broken
-    // conditions: category has more than 1 sub-category
-    // when: trying to add a new category
-    // what: takes old sub-category name and adds it to the old category (old category will have the correct amount shown in the array)
-            // with the old name, old amount
-    // why: else if in printBudgetExpenses() isnt working as intended - maybe something wrong with indexCategory (sub category doesnt have the position as to where to put itself)
+
+// ------------------------- Edit Expense -------------------------
+
+// When edit button is checked 
+// TODO: Jazz it up - make the h2 change to "editing ${category}"
+// also highlight the row of the subcategory that is being checked
+
+
+// *** finds category/sub-category and updates their values - no need to check because the edit button only applies to categories/sub-categories that exist 
+myApp.editExpense = (array) => {
+    debugger
+    //get the index of the selected category
+    const editCategoryIndex =  myApp.findExpense(array, myApp.userCategory); 
+    console.log(editCategoryIndex); 
+
+    // get the index of the selected sub-category
+    const editSubCategoryIndex = myApp.findExpense(array[editCategoryIndex].subcategory, myApp.userSubcategory);
+    console.log(editSubCategoryIndex);
+
+
+    //edit sub-category amount in the array
+     array[editCategoryIndex].subcategory[editSubCategoryIndex].amount = myApp.budgetAmount;
+    console.log("Your new subcategory total ", array[editCategoryIndex].subcategory[editSubCategoryIndex].amount);
+
+    //calculate the new category total and amend the array
+    myApp.categoryTotal(array, editCategoryIndex);
+    array[editCategoryIndex].amount = myApp.sumSubCategory;
+    console.log("Your new category total ", array[editCategoryIndex].amount);
+    
+    //print the edited categories
+    $(`.${myApp.userCategory}.category .budget`).text(`$ ${array[editCategoryIndex].amount}`);
+
+    //print the edited sub-categories
+    $(`.${myApp.userSubcategory}.sub-category .budget`).text(`$ ${array[editCategoryIndex].subcategory[editSubCategoryIndex].amount}`);
+
+    //clear the radio buttons
+    $('input[type="radio"]').prop('checked', false);
+    // prop gets value of property and changes it
+};
+
+
+// *** finds the index of any expense
+myApp.findExpense = (array, category) => {
+
+    return array.findIndex((index) => {
+        return index.name = category;
+    });
+};
+
+// ------------------------- End of Edit Expense -------------------------
 
 // -------------------------- Add Expense --------------------------
 
@@ -58,15 +99,15 @@ myApp.listenSubmit = () => {
 myApp.createSubCategory = (array, category) => {
     // the category parameter is a placeholder for the filterExpense() method which accepts two arguments (so you can use it to filter categories and sub-categories)
     
+    //reset number to -1 (no match) before findIndex. otherwise the old value from the last time the function was called will still be stored in there. thats because if nothing meets the condition of findIndex() the indexCategory value will NOT change.
     myApp.indexCategory = -1;
     // TODO: WHY DOES THIS HAVE TO BE OUT HERE FOR IT TO WORK? WHY WONT THIS EXPRESSION WORK INSIDE OF myApp.findCategory() ???????
-    //reset number to not found before looking again. otherwise the old value from the last time the function was called will still be stored in there. thats because if nothing meets the condition of findIndex() the indexCategory will NOT change.
 
     //filter for the category selected by the user - checks if category exists
-    const filterCategory = myApp.filterExpense(array, category); 
+    myApp.filterCategory = myApp.filterExpense(array, category); 
 
     //if the category does not exist
-    if (filterCategory === undefined || filterCategory.length === 0){
+    if (myApp.filterCategory === undefined || myApp.filterCategory.length === 0){
         console.log(`${myApp.userCategory} does not exist`);
         //create a new category and new subcategory in the array
         budget.push( { name: myApp.userCategory, subcategory: [{name:myApp.userSubcategory, amount: myApp.budgetAmount}] } );
@@ -76,25 +117,29 @@ myApp.createSubCategory = (array, category) => {
         //second parameter is using the array length as an index - the new category is pushed to the end of the array this lets the function kno which category the total is for. Don't forget -1 on length!!!!!!!!
 
         // print the category and sub-category to the DOM - will also check for new/existing categories
+        myApp.printBudgetExpenses(array);
 
     // if the category already exists 
-    } else if (filterCategory.length > 0) {
+    } else if (myApp.filterCategory.length > 0) {
         // find the category in the array 
         myApp.findCategory(array);
         console.log(`Found your category of: ${myApp.userCategory}. It is located in index: ${myApp.indexCategory} in the following array`, array);
-        //within category, check if the subcategory exists. If it doesn't; create a new subcategory, calculate the new total of category and add it to the array. If the subcategory exists, alert the user and dont change the data structure.
+        //within category, check if the subcategory exists. If it doesn't create a new subcategory, calculate the new total of category and add it to the array. If the subcategory exists, check if the user is editing. If the user isnt editing alert user.
         myApp.findSubcategory(array);
         // print the category and sub-category to the DOM - will also check for new/existing categories
     }
 
-    myApp.printBudgetExpenses(array);
+    // myApp.printBudgetExpenses(array); TODO: ORIGINAL
 
+    $('.input form')[0].reset();
+    //https://stackoverflow.com/questions/3786694/how-to-reset-clear-form-through-javascript
+    // reset is a DOM element method, DOM sits at index[0] of the jquery object
 };
 
 
 // *** checks array for the selected expense category
 myApp.filterExpense = (array, category) => {
-    //need return to store the value that filter() returns
+    //need return to store the value that filter() returns (currently returns undefined if there is no category)
     return array.filter((index) => {
         return index.name === category;
     });
@@ -114,45 +159,53 @@ myApp.categoryTotal = (array, index) => {
 };
 
 // *** finds the category inputted by the user in array - returns the index number where the category already exists 
-// there is only one dependent for this function
 myApp.findCategory = (array) => {
 
-    // myApp.indexCategory is reset to -1 before this function is called every time
+    // myApp.indexCategory is reset to -1 before this function is called every time (in the myApp.createSubcategory() method)
     
     myApp.indexCategory = array.findIndex((index) => {
         return index.name === myApp.userCategory;
     });
+
     console.log("This category exists in budget, it has an index position of ", myApp.indexCategory);
 };
 
-// *** checks if the sub-category exists. alert the user if sub-category already exists, add the sub-category if it does not
+// *** checks if the sub-category exists. if sub-category exists and edit button checked off - enable edit. If edit button is not checked off - alert user that the sub category exists and do not add.
 myApp.findSubcategory = (array) => {
     // array is the budget or spent array
-    const filterSubcategory = myApp.filterExpense(array[myApp.indexCategory].subcategory, myApp.userSubcategory); 
+    myApp.filterSubcategory = myApp.filterExpense(array[myApp.indexCategory].subcategory, myApp.userSubcategory); 
     //myApp.indexCategory is created by the findCategory function, this function must be called after it
 
     //  if the array has nothing in it, no subcategories are found. create a new object (subcategory) and an array within it
-    if (filterSubcategory === undefined || filterSubcategory.length === 0){
+    if (myApp.filterSubcategory === undefined || myApp.filterSubcategory.length === 0){
         //create a new sub category
         array[myApp.indexCategory].subcategory.push({ name: myApp.userSubcategory, amount: myApp.budgetAmount });
         console.log(`This sub-category does not exist! I've added it for you`, array);
         // calculate the new total of the category 
         myApp.categoryTotal(array, myApp.indexCategory);
-        // second argument is the index position of the existing category 
-    } else if (filterSubcategory.length > 0) {
-        // if that array has more than one item (sub-category exists) - do NOT create a new sub category
+        // second argument is the index position of the existing category
+        //check array for data and print to DOM
+        myApp.printBudgetExpenses(array);
+       
+    // if the subcategory exists and the edit button is checked off, let printBudgetExpenses know that the user is attempting to edit
+    } else if (myApp.filterSubcategory.length > 0 && $('table .edit').is(':checked')) {
+        //this lets the printBudgetExpenses() method know that the subcategory exists and edit button has been checked off
+        myApp.userEdit = true;
+        // if the subcategory exists and the edit button is NOT checked off, alert the user.
+        
+        // check array for data and print to DOM
+        myApp.printBudgetExpenses(array);
+    } else if (myApp.filterSubcategory.length > 0)
         alert('This sub-category already exists!');
-    }
-};
+}
 
-// *** for every item in the budget array - display: subcategory + amount and category + amount
-// print only when something has changed - index position will vary depending if the category already exists or if it was just added
+
+// *** print expenses only when something has changed (category or sub-category) - index position will vary depending if the category already exists or if it was just added
 myApp.printBudgetExpenses = (array) => {
-    
+
+    console.log("is the user trying to edit?", myApp.userEdit);//this is working TODO:
     // if category does not exist
     if (myApp.indexCategory === undefined || myApp.indexCategory < 0) {
-
-
         //print the newly added category
         $('.heading').after(`
             <tr class="${myApp.userCategory} category">
@@ -172,8 +225,13 @@ myApp.printBudgetExpenses = (array) => {
         // print the newly added sub-category
         myApp.printSubcategories(myApp.userCategory, myApp.newSubcategoryName, myApp.newSubcategoryAmount, "budget");
 
+    // category exists AND user is attempting to edit (value assigned from findSubCategory() method)
+    } else if (myApp.indexCategory > - 1 && myApp.userEdit === true){
+        
+        // call editExpense() method to change the DOM
+        myApp.editExpense(array);
 
-        // if category already exists - don't print the category again. Find it's classs and change the amount
+    // if category already exists - don't print the category again. Find it's classs and change the amount
     } else if (myApp.indexCategory > -1) {
         // take the value and amount of the existing category and print it
         $(`.${myApp.userCategory}.category .budget`).text(`$ ${myApp.sumSubCategory}`);
@@ -234,6 +292,8 @@ myApp.convertNum = (string) => {
     // once this update is complete, check the array for objects
     // if index has object, print the objects and their totals only if the object does not have a null value for the sub-category (assuming we cannot delete objects from the array)
     // sum up the totals of the objects (category) and print
+    //once checked, ask the user to confirm
+    //when the user confirms, remove the sub category from the data structure
 
 // 4) editing sub categories 
     // if the user chooses to edit - check if there is an existing sub category
@@ -244,9 +304,7 @@ myApp.convertNum = (string) => {
         // when the user is editing, make it abundantly clear in the input section's h2
         // once the user clicks submit uncheck the edit button (do the same thing with the delete button)
 
-// 5) Delete Button
-    //once checked, ask the user to confirm
-    //when the user confirms, remove the sub category from the data structure
+ 
 
 //  *************************************************************************************************
 
@@ -259,3 +317,5 @@ myApp.convertNum = (string) => {
 $(function () {
     myApp.init();
 });
+
+
