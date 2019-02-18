@@ -3,8 +3,16 @@ table {
     border-spacing: 25px;
 }
 
+tr.category {
+    text-decoration: underline;
+}
+
 th {
     text-align: left;
+}
+
+.budget {
+font-family: 'Crimson Text', serif;
 }
 
 tr.sub-category td:first-child {

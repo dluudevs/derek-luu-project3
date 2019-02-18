@@ -148,6 +148,9 @@ legend, button::-moz-focus-inner, input::-moz-focus-inner {
 * {
   margin: 0; }
 
+body {
+  font-family: 'Lato', sans-serif; }
+
 .wrapper {
   width: 90%;
   max-width: 1600px;
@@ -156,6 +159,14 @@ legend, button::-moz-focus-inner, input::-moz-focus-inner {
 .wrapper_inner {
   width: 90%;
   padding: 2.5%; }
+
+@media (max-width: 1198px) {
+  .wrapper_inner {
+    padding: 1.5%; }
+  h2 {
+    margin-bottom: 1.5%; }
+  h1 {
+    margin-top: 1.5%; } }
 
 .table-spacing {
   display: -webkit-box;
@@ -190,8 +201,30 @@ h1 {
   width: 45%;
   margin-right: 5%; }
 
+@media (max-width: 1198px) {
+  .input {
+    margin-right: 2.5%; } }
+
 .output {
   width: 50%; }
+
+@media (max-width: 1121px) {
+  h1 {
+    margin-left: 10%; }
+  .flex-row {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center; }
+  .input,
+  .output {
+    width: 80%; }
+  .input {
+    margin-right: 0;
+    margin-bottom: 3%; } }
 
 input {
   padding-left: 1.5%; }
@@ -219,15 +252,21 @@ select {
   -moz-appearance: textfield; }
 
 .submit {
-  width: 30%;
+  width: 25%;
   margin-bottom: 0; }
 
 table {
   width: 100%;
   border-spacing: 25px; }
 
+tr.category {
+  text-decoration: underline; }
+
 th {
   text-align: left; }
+
+.budget {
+  font-family: 'Crimson Text', serif; }
 
 tr.sub-category td:first-child {
   padding-left: 2%; }
