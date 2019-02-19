@@ -15,11 +15,27 @@ myApp.init = () => {
    //how to create if statement for event listeners (ie., if listenEdit is called, dont call listenExpense 
 
 
-   myApp.listenEdit(budget)
    myApp.listenDelete(budget); 
+   myApp.listenEdit(budget)
    myApp.listenExpense(budget);
 
+   //on click and on submit = the same event for the listener?
+        //test this by removing the onsubmit before clicking submit on edit, after it is clicked add the event listener back
+
+    //another thing is to add another event handle to submit, one that doesnt have anything to do with submit/click. and then force trigger so the edit function runs
+
+   // what conditions do i need to not have findExpense fire off an alert   
    
+   //or should i nest functions (one at most)
+
+
+   //Adam's suggestion
+   
+   //listen all the time for the submit button  
+        //if on submit, the edit is checked off. do edit things
+        //else if run the add
+
+    //constantly listen for delete? because it doesnt require a submit function?
     
 };
 
@@ -29,7 +45,7 @@ myApp.listenExpense = (array) => {
     $('.input form').on('submit', function (e) {
         e.preventDefault();
 
-        myApp.addStatus = true;
+        // myApp.addStatus = true;
         // store user's input
         myApp.getUserInput();
         // returns the index of the user selected expense - alerts user if expense already exists
@@ -85,8 +101,14 @@ myApp.findExpense = (array, category) => {
         alert(`You have edit selected, but I think you're trying to add a new expense. I went ahead and added a new expense for you.`);
     } else if (myApp.expenseIndex === -1 && myApp.editStatus == true){
         alert(`You're trying to edit an expense that doesnt exist!`);
+    } else {
+        // do nothing. coerce the function to get to this point so it doesnt keep running. 
+        // when do i want 
     }
-        
+       
+    myApp.editStatus = undefined;
+    myApp.deleteStatus = undefined;
+    myApp.addStatus = undefined;
     console.log ("the index of the expense you are looking for: ", myApp.expenseIndex, "if -1 the expense does not exist");
 }
 
@@ -134,10 +156,10 @@ myApp.listenEdit = (array) => {
     $('table').on('click', '.edit', function () {
 
         //incase user changes mind to edit
-        myApp.deleteStatus = undefined;
+        // myApp.deleteStatus = undefined;
 
         //edit status set to true to let findExpense know
-        myApp.editStatus = true;
+        // myApp.editStatus = true;
         // get the category where edit is clicked
         let editValue = $('.edit:checked').val();
         $(`option[value="${editValue}"]`).prop("selected", true); //TODO:turn this off
@@ -170,7 +192,7 @@ myApp.editExpense = (array) => {
         //print the new amount
         myApp.printExpenses(array, myApp.expenseIndex);
         //reset edit status - dependent has been invoked (findExpense)
-        myApp.editStatus = undefined;
+        // myApp.editStatus = undefined;
         //change text back after new amount submitted
         $(`.input h2`).text(`Please enter your monthly budget`);
     });
@@ -185,7 +207,7 @@ myApp.editExpense = (array) => {
         $('table').on('click', '.delete', function(){
 
             //incase user changes mind to delete
-            myApp.editStatus = undefined;
+            // myApp.editStatus = undefined;
 
             
             // ask user for confirmation
@@ -198,11 +220,11 @@ myApp.editExpense = (array) => {
                 //clear radio buttons
                 $('input[type="radio"]').prop('checked', false);
 
-                myApp.deleteStatus = true;
+                // myApp.deleteStatus = true;
                 // find the index of the category selected by the user
                 myApp.findExpense(array, deleteValue);
                 //reset delete status - dependent has been invoked (findExpense)
-                myApp.deleteStatus = undefined;
+                // myApp.deleteStatus = undefined;
                 array.splice(myApp.expenseIndex, 1);
                 console.log(deleteValue);
                 $(`.${deleteValue}.category`).empty();
