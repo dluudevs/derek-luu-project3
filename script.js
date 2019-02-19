@@ -32,13 +32,6 @@ myApp.listenSubmit = (array) => {
     });
 }
 
-// myApp.budgetMe = (array) => {
-//     //check if edit and delete buttons are checked
-//     if (myApp.editStatus === undefined && myApp.deleteStatus === undefined) {
-//         // if neither button is clicked, run add budget expenses
-//         myApp.addExpense(array);
-    
-// };
 
 //Add
 myApp.addExpense = (array) => {
@@ -72,13 +65,13 @@ myApp.getUserInput = () => {
     myApp.userCategory = $('#category-budget').val().toLowerCase();
     myApp.amount = myApp.convertNum($('#budget').val());
 
-    console.log(`[User category: ${myApp.userCategory}], [User budget: ${myApp.amount}]`);
+    // console.log(`[User category: ${myApp.userCategory}], [User budget: ${myApp.amount}]`);
 };
 
 //*** finds index of the expense - store the value for when we run the printExpenses and edit method 
 myApp.findExpense = (array, category) => {
 
-    console.log("findExpense is looking into this array: ", array);
+    // console.log("findExpense is looking into this array: ", array);
 
     //use findIndex to look for category
     myApp.expenseIndex = array.findIndex((index) => {
@@ -93,7 +86,7 @@ myApp.findExpense = (array, category) => {
         alert(`You're trying to edit an expense that doesn't exist!`);
     }
         
-    console.log ("the index of the expense you are looking for: ", myApp.expenseIndex, "if -1 the expense does not exist");
+    // console.log ("the index of the expense you are looking for: ", myApp.expenseIndex, "if -1 the expense does not exist");
 };
 
 //*** adds user input to the end of the array
@@ -143,23 +136,23 @@ myApp.editExpense = (array) => {
     myApp.findExpense(array, myApp.userCategory);
     //reset delete status - dependent has been invoked (findExpense)
     myApp.editStatus = undefined;
-    console.log("editexpense has this expenseIndex: ", myApp.expenseIndex);
+    // console.log("editexpense has this expenseIndex: ", myApp.expenseIndex);
     // amend the value
     array[myApp.expenseIndex].amount = myApp.amount;
-    console.log("this is the new array: ", array);
+    // console.log("this is the new array: ", array);
     //print the new amount
     myApp.printExpenses(array, myApp.expenseIndex);
 }
      
 
 
-    // *** UX ***
-    //this all requires event listeners
-    //pre-select the category that the user clicked on
-    //make the value = to the category name (make this the value of the button?)
-    // change the h2 to editing - highlight the row if possible
-        //add the class
-        //force prop clicked = true to prompt css animation
+// *** UX ***
+//this all requires event listeners
+//pre-select the category that the user clicked on
+//make the value = to the category name (make this the value of the button?)
+// change the h2 to editing - highlight the row if possible
+    //add the class
+    //force prop clicked = true to prompt css animation
     
 
 //Delete
@@ -167,7 +160,6 @@ myApp.editExpense = (array) => {
     // ask the user if they really want to delete ${category} in your message
     myApp.listenDelete = (array) => {
         $('table').on('click', '.delete', function(){
-            //reset deleteStatus
             // ask user for confirmation
             let result = confirm("Please confirm you want to delete")
             if (result){
@@ -180,7 +172,7 @@ myApp.editExpense = (array) => {
                 //reset delete status - dependent has been invoked (findExpense)
                 myApp.deleteStatus = undefined;
                 array.splice(myApp.expenseIndex, 1);
-                console.log(array);
+                // console.log(array);
                 $(`.${deleteValue}.category`).empty();
 
                 // let the user know the expense has been deleted
