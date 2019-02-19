@@ -9,7 +9,7 @@ const budget = [
 // data structure
 
 
-//TODO:Remove console logs
+//TODO:fixedExpense runs 3 times when you dont want it to. resulting in the wrong alert message being displayed
 
 myApp.init = () => {
    //how to create if statement for event listeners (ie., if listenEdit is called, dont call listenExpense 
@@ -197,7 +197,7 @@ myApp.editExpense = (array) => {
 
                 //clear radio buttons
                 $('input[type="radio"]').prop('checked', false);
-                
+
                 myApp.deleteStatus = true;
                 // find the index of the category selected by the user
                 myApp.findExpense(array, deleteValue);
