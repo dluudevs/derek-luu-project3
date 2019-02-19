@@ -187,15 +187,17 @@ myApp.editExpense = (array) => {
             //incase user changes mind to delete
             myApp.editStatus = undefined;
 
-            //clear radio buttons
-            $('input[type="radio"]').prop('checked', false);
-
+            
             // ask user for confirmation
             let result = confirm("Please confirm you want to delete")
             if (result){
                 // take the value of the category the user wants to delete
                 let deleteValue = $('.delete:checked').val();
                 //switch on delete mode - no popup about existing expense
+
+                //clear radio buttons
+                $('input[type="radio"]').prop('checked', false);
+                
                 myApp.deleteStatus = true;
                 // find the index of the category selected by the user
                 myApp.findExpense(array, deleteValue);
