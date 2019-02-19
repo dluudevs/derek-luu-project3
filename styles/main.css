@@ -238,10 +238,10 @@ select {
 
 .expense select {
   margin-right: 2.5%;
-  width: 45%; }
+  width: 55%; }
 
 .expense input {
-  width: calc(55% - 2.5%); }
+  width: calc(45% - 2.5%); }
 
 .amount input::-webkit-inner-spin-button,
 .amount input::-webkit-outer-spin-button {
@@ -258,9 +258,6 @@ select {
 table {
   width: 100%;
   border-spacing: 25px; }
-
-tr.category {
-  text-decoration: underline; }
 
 th {
   text-align: left; }

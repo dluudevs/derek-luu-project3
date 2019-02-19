@@ -18,15 +18,13 @@
                     <div class="expense">
                         <label for="category-budget" class="visually-hidden">Expense:</label>
                         <select name="category" id="category-budget" required>
-                            <option value="" selected hidden>Please select a category</option>
+                            <option class="default" value="" selected hidden>Please select a category</option>
                             <option value="food">Food</option>
                             <option value="entertainment">Entertainment</option>
                             <option value="travel">Travel</option>
                             <option value="debt">Debt</option>
                             <option value="discretionary">Discretionary</option>
                             <option value="miscellaneous">Miscellaneous</option>
-                        <label for="subcategory-budget">Expense:</label>
-                        <input type="text" id="subcategory-budget" placeholder="Please name your expense" required> 
                     </div>
     
                     <div class="amount">
@@ -51,18 +49,9 @@
                     <!-- <tr class="food category">
                         <td class="name">Food</td>
                         <td class="budget">$200.00</td>
+                        <td><input type=radio name=action value=food class=edit></td>
+                        <td><input type=radio name=action value=food class=delete></td>
                     </tr> -->
-                    <!-- use class name food as selector to append subcategories -->
-                    <!-- use class names budget/spent/difference as selectors to update their respective amounts -->
-                    <!-- <tr class="groceries sub-category">
-                        <td class="name">Groceries</td>
-                        <td class="budget">$200.00</td>
-                        <td><input type="radio" name="action" value="edit" class="edit"></td>
-                        <td><input type="radio" name="action" value="delete" class="delete"></td>
-                    </tr> -->
-                    <!-- if user deletes sub category - remove the entire groceries class -->
-                    <!-- if user selects edit - go inside the groceries class and update based on user changes -->
-                    <!-- indent all (.sub-category .category) to the right -->
                 </table>
             </div>
         </div>

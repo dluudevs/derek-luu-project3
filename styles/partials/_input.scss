@@ -13,11 +13,11 @@ select {
 
 .expense select {
     margin-right: $general-spacing;
-    width: 45%;
+    width: 55%;
 }
 
 .expense input {
-    width: calc(55% - 2.5%);
+    width: calc(45% - 2.5%);
 }
 
 .amount input::-webkit-inner-spin-button, 
