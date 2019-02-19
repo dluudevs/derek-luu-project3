@@ -199,15 +199,15 @@ myApp.editExpense = (array) => {
                 myApp.deleteStatus = true;
                 // find the index of the category selected by the user
                 myApp.findExpense(array, deleteValue);
+                //reset delete status - dependent has been invoked (findExpense)
+                myApp.deleteStatus = undefined;
                 array.splice(myApp.expenseIndex, 1);
-                console.log(array);
+                console.log(deleteValue);
                 $(`.${deleteValue}.category`).empty();
                 
                 // let the user know the expense has been deleted
                 let expenseString = myApp.capitalize(deleteValue);
                 alert(`You have deleted ${expenseString}`);
-                //reset delete status - dependent has been invoked (findExpense)
-                myApp.deleteStatus = undefined;
             };
         });
     }
