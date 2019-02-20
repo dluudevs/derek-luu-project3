@@ -12,8 +12,10 @@ const budget = [
     //write functions as you need them. dont write a function as you need them (re-use) and dont create a function and try to use it everywhere
     //if something breaks - psuedo code what you expect to happen and compare with what is actually happening
 
-// FIXME: event listeners for submit button is conflicting. 
-    //created a seperate button for edit ** TODO: dont know if this woks
+//TODO: UX: hide edit button when in edit mode (button is clicked)
+            //show submit button when exiting edit mode
+            //show submit button after edit is complete
+
 
 myApp.init = () => {
 
@@ -181,7 +183,6 @@ myApp.listenEdit = (array) => {
 //*** when submit button is clicked, edit expenses
 myApp.editExpense = (array) => {
 
-    //TODO: when the edit button is clicked (second button)
     $('button.edit-button').on('click', function (e) {
         //store user input 
         myApp.getUserInput();
