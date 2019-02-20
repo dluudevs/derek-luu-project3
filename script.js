@@ -12,9 +12,8 @@ const budget = [
     //write functions as you need them. dont write a function as you need them (re-use) and dont create a function and try to use it everywhere
     //if something breaks - psuedo code what you expect to happen and compare with what is actually happening
 
-// TODO: event listeners for submit button is conflicting. 
-// cannot add expense more than once for some reason (addIndex returning 0 for new expenses)
-
+// FIXME: event listeners for submit button is conflicting. 
+    //created a seperate button for edit ** TODO: dont know if this woks
 
 myApp.init = () => {
 
@@ -29,7 +28,7 @@ myApp.init = () => {
         //change the h2 back
         //remove the selected attribute
         //end the function (don't change the array and dont print)
-    //else if edit button is checked - listen for the user to click submit (if the user clicks delete the event listener will fire and nothing will have changed)
+    //else if edit button is checked - listen for the user to click submit (if the user clicks delete the event listener will fire and nothing will have changed) - give it its own button
         //append the array
             //get the category
             //find the index in the array
@@ -68,11 +67,14 @@ myApp.listenAdd = (array) => {
         // only add the expense if edit button is not checked (to avoid conflicting event listeners)
        
         myApp.getUserInput();
+
         console.log(`from listenAdd [User category: ${myApp.userCategory}], [User budget: ${myApp.amount}]`);
         // returns the index of the user selected expense - alerts user if expense already exists
+        
         let addIndex = array.findIndex((category) => {
-            return category.name = myApp.userCategory;
+            return category.name === myApp.userCategory;
         });
+
         console.log("addIndex is ", addIndex);
 
         //if the array is empty or the expense doesnt exist - push expense to the array
@@ -86,7 +88,7 @@ myApp.listenAdd = (array) => {
         myApp.printExpenses(array, addIndex);
         
         //resets form after submission
-        // $('.input form')[0].reset();
+        $('.input form')[0].reset();
     });
 };
 
@@ -162,16 +164,16 @@ myApp.listenEdit = (array) => {
             $('input.edit').prop('checked', false);
             //change the text back
             $(`.input h2`).text(`Please enter your monthly budget`)
-
+            //put cusur on amount input
+            $('#budget').focus();
+            
             //once the category changes selected attribute on the option is automatically changed to false
 
         });
 
-        // double check to ensure that the edit button is still checked - if the category is changed, the button is no longer checked
-        if ($('.edit').is(':checked')){
-            // edit expense - also checks if the submit button is clicked
-            myApp.editExpense(array);
-        } 
+        // edit expense - also checks if the edit button is clicked
+        myApp.editExpense(array);
+        
     }); 
 };
 
@@ -179,9 +181,8 @@ myApp.listenEdit = (array) => {
 //*** when submit button is clicked, edit expenses
 myApp.editExpense = (array) => {
 
-    // when the submit button is clicked
-    $('.input .submit').on('click', function (e) {
-        //clear radio button
+    //TODO: when the edit button is clicked (second button)
+    $('button.edit-button').on('click', function (e) {
         //store user input 
         myApp.getUserInput();
         // returns index of the user selected expense - should always return an index > 1
@@ -189,6 +190,7 @@ myApp.editExpense = (array) => {
             //use let (instead of name space) for local access only. only this function can change the variable's  value.
             return category.name = myApp.userCategory
         })
+        console.log("editExpense here. user selected category: ", myApp.userCategory);
         // amend the amount in the array
         array[editIndex].amount = myApp.amount;
         console.log("this is the new array: ", array);
@@ -197,6 +199,8 @@ myApp.editExpense = (array) => {
         //change text back after new amount submitted
         $(`.input h2`).text(`Please enter your monthly budget`);
         $('.edit').prop('checked', false);
+        //resets form after submission
+        $('.input form')[0].reset();
     });
 }    
 
@@ -238,6 +242,8 @@ myApp.listenDelete = (array) => {
             $('.delete').prop('checked', false);
         }
     });
+    //resets form after submission
+    $('.input form')[0].reset();
 }
 
    

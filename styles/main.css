@@ -251,7 +251,8 @@ select {
 .amount input {
   -moz-appearance: textfield; }
 
-.submit {
+.submit,
+.edit-button {
   width: 25%;
   margin-bottom: 0; }
 
