@@ -8,116 +8,104 @@ const budget = [
 ];
 // data structure
 
+// NOTES TO SELF:
+    //write functions as you need them. dont write a function as you need them (re-use) and dont create a function and try to use it everywhere
+    //if something breaks - psuedo code what you expect to happen and compare with what is actually happening
 
-//TODO:fixedExpense runs 3 times when you dont want it to. resulting in the wrong alert message being displayed
+// TODO: event listeners for submit button is conflicting. 
+// cannot add expense more than once for some reason (addIndex returning 0 for new expenses)
+
 
 myApp.init = () => {
-   //how to create if statement for event listeners (ie., if listenEdit is called, dont call listenExpense 
 
-
-   myApp.listenDelete(budget); 
-   myApp.listenEdit(budget)
-   myApp.listenExpense(budget);
-
-   //on click and on submit = the same event for the listener?
-        //test this by removing the onsubmit before clicking submit on edit, after it is clicked add the event listener back
-
-    //another thing is to add another event handle to submit, one that doesnt have anything to do with submit/click. and then force trigger so the edit function runs
-
-   // what conditions do i need to not have findExpense fire off an alert   
-   
-   //or should i nest functions (one at most)
-
-
-   //Adam's suggestion
-   
-   //listen all the time for the submit button  
-        //if on submit, the edit is checked off. do edit things
-        //else if run the add
-
-    //constantly listen for delete? because it doesnt require a submit function?
+    myApp.listenEdit(budget);
+    //do all the UX changes
+    //change the h2
+    //select the category
+    //go to the amount input
+    //if another category is selected 
+        //assume user wants to add (listen for submit)
+        //uncheck the button
+        //change the h2 back
+        //remove the selected attribute
+        //end the function (don't change the array and dont print)
+    //else if edit button is checked - listen for the user to click submit (if the user clicks delete the event listener will fire and nothing will have changed)
+        //append the array
+            //get the category
+            //find the index in the array
+            //edit amount in the array
+        //print the new amount
+        //change the h2 back
+        //reset form (covers the below)
+        //remove the selected attribute
+        //uncheck button
     
+    //listen for delete 
+    myApp.listenDelete(budget); 
+    //shoot popup window and ask user for confirmation
+    //get category of delete button (for alert message)
+    //if user confirms (alert message) to delete expense
+        //run delete
+            // find index in the array
+            // delete in the array
+            // delete in DOM
+            //uncheck button
+    //else (if user cancels out) just uncheck the button
+    
+    
+    myApp.listenAdd(budget);
+    //listen for add 
+        //if in edit state, do nothing
+        // else add to array and print
 };
 
 
 //Add
-myApp.listenExpense = (array) => {
+myApp.listenAdd = (array) => {
     $('.input form').on('submit', function (e) {
         e.preventDefault();
 
-        // myApp.addStatus = true;
-        // store user's input
+        // only add the expense if edit button is not checked (to avoid conflicting event listeners)
+       
         myApp.getUserInput();
+        console.log(`from listenAdd [User category: ${myApp.userCategory}], [User budget: ${myApp.amount}]`);
         // returns the index of the user selected expense - alerts user if expense already exists
-        myApp.findExpense(array, myApp.userCategory);
-        //if the array is empty or the expense doesnt exist - push expense to the array
-        if (myApp.expenseIndex === -1){
-            myApp.pushArray(array, myApp.userCategory, myApp.amount);
-        }
-        // printExpense - will add amount to DOM if category is new, wil amend amount if category is existing
-        myApp.printExpenses(array, myApp.expenseIndex);
+        let addIndex = array.findIndex((category) => {
+            return category.name = myApp.userCategory;
+        });
+        console.log("addIndex is ", addIndex);
 
+        //if the array is empty or the expense doesnt exist - push expense to the array
+        if (addIndex === -1){
+            array.push( {name: myApp.userCategory, amount: myApp.amount} );
+        } else {
+            alert(`This expense already exists!`);
+        }
+        
+        // printexpense
+        myApp.printExpenses(array, addIndex);
+        
         //resets form after submission
-        $('.input form')[0].reset();
+        // $('.input form')[0].reset();
     });
 };
 
 
 // *** store values of user's input
 myApp.getUserInput = () => {
-
+    
     // *** converts user input to dollars
     myApp.convertNum = (string) => {
         return parseFloat(string);
         // parseFloat returns a number with a decimal place
     };
-
+    
     // take user's category selection and store it 
     myApp.userCategory = $('#category-budget').val().toLowerCase();
     myApp.amount = myApp.convertNum($('#budget').val());
-
+    
     console.log(`[User category: ${myApp.userCategory}], [User budget: ${myApp.amount}]`);
 };
-
-myApp.capitalize = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-//*** finds index of the expense - store the value for when we run the printExpenses and edit method 
-myApp.findExpense = (array, category) => {
-
-    console.log("findExpense is looking into this array: ", array);
-
-    //use findIndex to look for category
-    myApp.expenseIndex = array.findIndex((index) => {
-        return index.name === category;
-    });
-
-    //if the category exists AND the user did not check off edit, AND did not check off delete
-    if (myApp.expenseIndex > - 1 && myApp.editStatus === undefined && myApp.deleteStatus === undefined){
-        //do nothing, alert tell user to use edit function
-        alert(`This expense exists already. Please select another expense or click edit`);
-    } else if (myApp.expenseIndex === -1 && myApp.editStatus == true && myApp.addStatus == true){
-        alert(`You have edit selected, but I think you're trying to add a new expense. I went ahead and added a new expense for you.`);
-    } else if (myApp.expenseIndex === -1 && myApp.editStatus == true){
-        alert(`You're trying to edit an expense that doesnt exist!`);
-    } else {
-        // do nothing. coerce the function to get to this point so it doesnt keep running. 
-        // when do i want 
-    }
-       
-    myApp.editStatus = undefined;
-    myApp.deleteStatus = undefined;
-    myApp.addStatus = undefined;
-    console.log ("the index of the expense you are looking for: ", myApp.expenseIndex, "if -1 the expense does not exist");
-}
-
- 
-
-//*** adds user input to the end of the array
-myApp.pushArray = (array, name, amount) => {
-    array.push({name: name, amount: amount});
-}
 
 //prints expense - add to DOM if new expense, amend if expense already exists (for edit function)
 myApp.printExpenses = (array, index) => {
@@ -150,94 +138,110 @@ myApp.printExpenses = (array, index) => {
 
 //Edit
 //listen for the edit 
-
 myApp.listenEdit = (array) => {
     
+    //event listeners are dynamic AF - they are ALWAYS listening. NO need to tell the function to call itself
     $('table').on('click', '.edit', function () {
 
-        //incase user changes mind to edit
-        // myApp.deleteStatus = undefined;
-
-        //edit status set to true to let findExpense know
-        // myApp.editStatus = true;
-        // get the category where edit is clicked
+        // get the category of the edit button 
         let editValue = $('.edit:checked').val();
-        $(`option[value="${editValue}"]`).prop("selected", true); //TODO:turn this off
-        let expenseString = myApp.capitalize(editValue);
+        // select the category for the user
+        $(`option[value="${editValue}"]`).prop("selected", true); 
+
+        //store the expense selected
+        let expenseString = $(`option[value="${editValue}"]`).text();
+
         //getting fancy with the h2 here - UX purposes
-        $(`.input h2`).text(`Please enter a new amount for ${expenseString}`); //TODO:change this back
+        $(`.input h2`).text(`Edit: Please enter a new amount for ${expenseString}`); 
         //highlight the amount box
         $('#budget').focus();
 
-        myApp.editExpense(array);
+        //listen if another category is selected 
+        $('#category-budget').on('change', function(){
+            //clear edit button
+            $('input.edit').prop('checked', false);
+            //change the text back
+            $(`.input h2`).text(`Please enter your monthly budget`)
 
+            //once the category changes selected attribute on the option is automatically changed to false
+
+        });
+
+        // double check to ensure that the edit button is still checked - if the category is changed, the button is no longer checked
+        if ($('.edit').is(':checked')){
+            // edit expense - also checks if the submit button is clicked
+            myApp.editExpense(array);
+        } 
     }); 
-    
 };
 
+
+//*** when submit button is clicked, edit expenses
 myApp.editExpense = (array) => {
 
     // when the submit button is clicked
     $('.input .submit').on('click', function (e) {
         //clear radio button
-        $('input[type="radio"]').prop('checked', false);
         //store user input 
         myApp.getUserInput();
-        // returns index of the user selected expense
-        myApp.findExpense(array, myApp.userCategory);
-        console.log("editexpense has this expenseIndex: ", myApp.expenseIndex);
-        // amend the value
-        array[myApp.expenseIndex].amount = myApp.amount;
+        // returns index of the user selected expense - should always return an index > 1
+        let editIndex = array.findIndex((category) => {
+            //use let (instead of name space) for local access only. only this function can change the variable's  value.
+            return category.name = myApp.userCategory
+        })
+        // amend the amount in the array
+        array[editIndex].amount = myApp.amount;
         console.log("this is the new array: ", array);
         //print the new amount
-        myApp.printExpenses(array, myApp.expenseIndex);
-        //reset edit status - dependent has been invoked (findExpense)
-        // myApp.editStatus = undefined;
+        myApp.printExpenses(array, editIndex);
         //change text back after new amount submitted
         $(`.input h2`).text(`Please enter your monthly budget`);
+        $('.edit').prop('checked', false);
     });
-}
-     
-
+}    
 
 //Delete
-//listen for the edit/delete button - if delete is clicked do not run add function
+//listen for the delete button
     // ask the user if they really want to delete ${category} in your message
-    myApp.listenDelete = (array) => {
-        $('table').on('click', '.delete', function(){
+myApp.listenDelete = (array) => {
+    $('table').on('click', '.delete', function(){
 
-            //incase user changes mind to delete
-            // myApp.editStatus = undefined;
+        //get category of the delete button (lowercase)
+        let deleteValue = $('.delete:checked').val();
+        // get the category name's text (for the capitalized text)
+        let expenseString = $(`.${deleteValue}`).find(`.name`).text()
 
+        let result = confirm("Please confirm you want to delete", expenseString);
+        //if user confirms to delete
+        if (result){
+            // take the value of the category the user wants to delete
+            //switch on delete mode - no popup about existing expense
+
+            // returns index of the user selected expense - should always return an index > 1
+            let deleteIndex = array.findIndex((category) => {
+                //use let (instead of name space) for local access only. only this function can change the variable's  value       
+                return category.name = deleteValue;          
+            }); 
+            //delete category in the array
+            array.splice(deleteIndex, 1);
+            //delete category in the DOM
+            $(`.${deleteValue}.category`).empty();
+            // let the user know the expense has been deleted
+            alert(`You have deleted ${expenseString}.`);
+
+            //clear radio buttons
+            $('input[type="radio"]').prop('checked', false);
             
-            // ask user for confirmation
-            let result = confirm("Please confirm you want to delete")
-            if (result){
-                // take the value of the category the user wants to delete
-                let deleteValue = $('.delete:checked').val();
-                //switch on delete mode - no popup about existing expense
-
-                //clear radio buttons
-                $('input[type="radio"]').prop('checked', false);
-
-                // myApp.deleteStatus = true;
-                // find the index of the category selected by the user
-                myApp.findExpense(array, deleteValue);
-                //reset delete status - dependent has been invoked (findExpense)
-                // myApp.deleteStatus = undefined;
-                array.splice(myApp.expenseIndex, 1);
-                console.log(deleteValue);
-                $(`.${deleteValue}.category`).empty();
-                
-                // let the user know the expense has been deleted
-                let expenseString = myApp.capitalize(deleteValue);
-                alert(`You have deleted ${expenseString}`);
-            };
-        });
-    }
+        } else {
+            //uncheck button so user is aware delete didnt go through
+            alert(`Delete cancelled.`)
+            $('.delete').prop('checked', false);
+        }
+    });
+}
 
    
-
+//Document ready son
 $(function (){
     myApp.init();
-})
+});
