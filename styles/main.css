@@ -151,6 +151,9 @@ legend, button::-moz-focus-inner, input::-moz-focus-inner {
 body {
   font-family: 'Lato', sans-serif; }
 
+.hidden {
+  display: none; }
+
 .wrapper {
   width: 90%;
   max-width: 1600px;
@@ -251,7 +254,7 @@ select {
 .amount input {
   -moz-appearance: textfield; }
 
-.submit,
+.submit-button,
 .edit-button {
   width: 25%;
   margin-bottom: 0; }

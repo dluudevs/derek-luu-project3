@@ -12,11 +12,6 @@ const budget = [
     //write functions as you need them. dont write a function as you need them (re-use) and dont create a function and try to use it everywhere
     //if something breaks - psuedo code what you expect to happen and compare with what is actually happening
 
-//TODO: UX: hide edit button when in edit mode (button is clicked)
-            //show submit button when exiting edit mode
-            //show submit button after edit is complete
-
-
 myApp.init = () => {
 
     myApp.listenEdit(budget);
@@ -152,25 +147,27 @@ myApp.listenEdit = (array) => {
         // select the category for the user
         $(`option[value="${editValue}"]`).prop("selected", true); 
 
-        //store the expense selected
-        let expenseString = $(`option[value="${editValue}"]`).text();
 
-        //getting fancy with the h2 here - UX purposes
-        $(`.input h2`).text(`Edit: Please enter a new amount for ${expenseString}`); 
+        //update UI for edit mode
+        $(`.input h2`).text(`Editing: Please enter a new amount`); 
         //highlight the amount box
         $('#budget').focus();
+        //add class to hide the add button
+        $('.submit-button').addClass('hidden');
+        //remove class to show the button
+        $('.edit-button').removeClass('hidden'); 
 
         //listen if another category is selected 
         $('#category-budget').on('change', function(){
+            //restore UI to neutral state
             //clear edit button
             $('input.edit').prop('checked', false);
-            //change the text back
-            $(`.input h2`).text(`Please enter your monthly budget`)
-            //put cusur on amount input
+            //turn off edit mode
+            myApp.editOff();
+            //put cursor on amount input
             $('#budget').focus();
             
             //once the category changes selected attribute on the option is automatically changed to false
-
         });
 
         // edit expense - also checks if the edit button is clicked
@@ -189,7 +186,7 @@ myApp.editExpense = (array) => {
         // returns index of the user selected expense - should always return an index > 1
         let editIndex = array.findIndex((category) => {
             //use let (instead of name space) for local access only. only this function can change the variable's  value.
-            return category.name = myApp.userCategory
+            return category.name === myApp.userCategory
         })
         console.log("editExpense here. user selected category: ", myApp.userCategory);
         // amend the amount in the array
@@ -197,13 +194,26 @@ myApp.editExpense = (array) => {
         console.log("this is the new array: ", array);
         //print the new amount
         myApp.printExpenses(array, editIndex);
+
+        //restore UI to neutral state
         //change text back after new amount submitted
-        $(`.input h2`).text(`Please enter your monthly budget`);
         $('.edit').prop('checked', false);
+        //turn off edit mode
+        myApp.editOff();
         //resets form after submission
         $('.input form')[0].reset();
     });
 }    
+
+//restores buttons and h2 to neutral state
+myApp.editOff = () => {
+    //removing class forces add button to show up
+    $('.submit-button').removeClass('hidden');
+    //adding class hides the edit button
+    $('.edit-button').addClass('hidden');
+    ///restore h2 to neutral state
+    $(`.input h2`).text(`Please enter your monthly budget`);
+}
 
 //Delete
 //listen for the delete button
@@ -225,27 +235,45 @@ myApp.listenDelete = (array) => {
             // returns index of the user selected expense - should always return an index > 1
             let deleteIndex = array.findIndex((category) => {
                 //use let (instead of name space) for local access only. only this function can change the variable's  value       
-                return category.name = deleteValue;          
+                return category.name === deleteValue;          
             }); 
             //delete category in the array
             array.splice(deleteIndex, 1);
             //delete category in the DOM
             $(`.${deleteValue}.category`).empty();
-            // let the user know the expense has been deleted
-            alert(`You have deleted ${expenseString}.`);
 
-            //clear radio buttons
+           //restore UI to neutral state
+            //clear radio button
             $('input[type="radio"]').prop('checked', false);
+            //turn off edit mode
+            myApp.editOff();
+            //resets form after submission
+            $('.input form')[0].reset();
+            // let the user know the expense has been deleted
+            alert(`You have deleted ${expenseString}`);
             
         } else {
             //uncheck button so user is aware delete didnt go through
-            alert(`Delete cancelled.`)
+            alert(`Delete cancelled`)
+            //restore UI to its neutral state
+            //clear radio button
             $('.delete').prop('checked', false);
+            //turn off edit mode
+            myApp.editOff();
+            //resets form after submission
+            $('.input form')[0].reset();
+            //change selected category to default
+            // $(`option[value="default"]`).prop("selected", true);
         }
     });
     //resets form after submission
     $('.input form')[0].reset();
+
 }
+
+
+
+
 
    
 //Document ready son
