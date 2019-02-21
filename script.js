@@ -249,8 +249,6 @@ myApp.listenDelete = (array) => {
             myApp.editOff();
             //resets form after submission
             $('.input form')[0].reset();
-            // let the user know the expense has been deleted
-            alert(`You have deleted ${expenseString}`);
             
         } else {
             //uncheck button so user is aware delete didnt go through
@@ -263,7 +261,6 @@ myApp.listenDelete = (array) => {
             //resets form after submission
             $('.input form')[0].reset();
             //change selected category to default
-            // $(`option[value="default"]`).prop("selected", true);
         }
     });
     //resets form after submission
