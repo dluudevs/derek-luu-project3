@@ -12,6 +12,8 @@ const budget = [
     //write functions as you need them. dont write a function as you need them (re-use) and dont create a function and try to use it everywhere
     //if something breaks - psuedo code what you expect to happen and compare with what is actually happening
 
+//TODO: accessbility with edit button, if you click enter if edit mode the form will submit (calls the add function)
+
 myApp.init = () => {
 
     myApp.listenEdit(budget);
