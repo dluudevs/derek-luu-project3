@@ -1,3 +1,4 @@
 *.docx
 /test-script.html
 /script.old.js
+/prepros-6.config

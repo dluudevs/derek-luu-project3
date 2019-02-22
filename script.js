@@ -1,4 +1,4 @@
-const myApp = {};
+    const myApp = {};
 
 const budget = [
     // {
